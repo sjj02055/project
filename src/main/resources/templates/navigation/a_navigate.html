@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <div th:replace="fragments/header ::header"></div>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/indexCss.css}"/>
+    <title>simpleMap</title>
+
+    <script th:inline="javascript">
+
+        var map, marker;
+        var markerArr = [], labelArr = [];
+        var startLat,startLon,endLat,endLon;
+        var marker_s, marker_e, marker_p1, marker_p2;
+        var startName, endName, poiName;
+        var markersArr = [], markereArr = [];
+        var totalMarkerArr = [];
+        var drawInfoArr = [];
+        var resultdrawArr = [];
+
+        function initTmap() {
+            if (navigator.geolocation) { // GPS를 지원하면
+                navigator.geolocation.getCurrentPosition(function (position) {
+                    map = new Tmapv2.Map("map_div", { // 지도가 생성될 div
+                        center: new Tmapv2.LatLng(position.coords.latitude, position.coords.longitude),
+                        width: "100%", // 지도의 넓이
+                        height: "100vh", // 지도의 높이
+                        zoom: 15,
+                        zoomControl: true,
+                        scrollwheel: true
+                    });
+                    var marker = new Tmapv2.Marker({
+                        position: new Tmapv2.LatLng(position.coords.latitude, position.coords.longitude),
+                        icon: "http://tmapapi.sktelecom.com/upload/tmap/marker/pin_b_m_a.png",
+                        map: map
+                    });
+                    /*<![CDATA[*/
+                    /*[# th:each="cctv : ${cctvs}"]*/
+                    var marker = new Tmapv2.Marker({
+                        position: new Tmapv2.LatLng(/*[[${cctv.latitude}]]*/,/*[[${cctv.longitude}]]*/),
+                        icon: "http://tmapapi.sktelecom.com/upload/tmap/marker/pin_w_m_c.png",
+                        map: map
+                    });
+                    /*[/]*/
+                    /*]]>*/
+                    $("#btn_select").click(
+                        function () {
+                            var searchKeyword = $('#searchKeyword').val(); // 검색 키워드
+                            $.ajax({
+                                method: "GET", // 요청 방식
+                                url: "https://apis.openapi.sk.com/tmap/pois?version=1&format=json&callback=result", // url 주소
+                                async: false, // 동기설정
+                                data: { // 요청 데이터 정보
+                                    "appKey": "l7xx436a08af66a84dfe95f772da7214efb1", // 발급받은 Appkey
+                                    "searchKeyword": searchKeyword, // 검색 키워드
+                                    "resCoordType": "EPSG3857", // 요청 좌표계
+                                    "reqCoordType": "WGS84GEO", // 응답 좌표계
+                                    "count": 10 // 가져올 갯수
+                                },
+                                success: function (response) {
+                                    var resultpoisData = response.searchPoiInfo.pois.poi;
+
+                                    // 2. 기존 마커, 팝업 제거
+                                    if (markerArr.length > 0) {
+                                        for (var i in markerArr) {
+                                            markerArr[i].setMap(null);
+                                        }
+                                        markerArr = [];
+                                    }
+
+                                    if (labelArr.length > 0) {
+                                        for (var i in labelArr) {
+                                            labelArr[i].setMap(null);
+                                        }
+                                        labelArr = [];
+                                    }
+
+                                    if (resultdrawArr.length > 0) {
+                                        for (var i in resultdrawArr) {
+                                            resultdrawArr[i]
+                                                .setMap(null);
+                                        }
+                                        resultdrawArr = [];
+                                    }
+
+                                    drawInfoArr = [];
+
+                                    var innerHtml = ""; // Search Reulsts 결과값 노출 위한 변수
+                                    //맵에 결과물 확인 하기 위한 LatLngBounds객체 생성
+                                    var positionBounds = new Tmapv2.LatLngBounds();
+
+                                    // 3. POI 마커 표시
+                                    for (var k in resultpoisData) {
+                                        // POI 마커 정보 저장
+                                        var noorLat = Number(resultpoisData[k].noorLat);
+                                        var noorLon = Number(resultpoisData[k].noorLon);
+                                        var name = resultpoisData[k].name;
+
+                                        // POI 정보의 ID
+                                        var id = resultpoisData[k].id;
+
+                                        // 좌표 객체 생성
+                                        var pointCng = new Tmapv2.Point(
+                                            noorLon, noorLat);
+
+                                        // EPSG3857좌표계를 WGS84GEO좌표계로 변환
+                                        var projectionCng = new Tmapv2.Projection.convertEPSG3857ToWGS84GEO(
+                                            pointCng);
+
+                                        var lat = projectionCng._lat;
+                                        var lon = projectionCng._lng;
+
+                                        // 좌표 설정
+                                        var markerPosition = new Tmapv2.LatLng(
+                                            lat, lon);
+
+                                        // Marker 설정
+                                        marker = new Tmapv2.Marker(
+                                            {
+                                                position: markerPosition, // 마커가 표시될 좌표
+                                                //icon : "http://tmapapi.sktelecom.com/upload/tmap/marker/pin_b_m_a.png",
+                                                icon: "http://tmapapi.sktelecom.com/upload/tmap/marker/pin_b_m_"
+                                                    + k
+                                                    + ".png", // 아이콘 등록
+                                                iconSize: new Tmapv2.Size(
+                                                    24, 38), // 아이콘 크기 설정
+                                                title: name, // 마커 타이틀
+                                                map: map // 마커가 등록될 지도 객체
+                                            });
+
+                                        // 결과창에 나타날 검색 결과 html
+                                        innerHtml += "<li><div onClick='poiDetail("
+                                            + id
+                                            + ");'><img src='http://tmapapi.sktelecom.com/upload/tmap/marker/pin_b_m_" + k + ".png' style='vertical-align:middle;'/><span>"
+                                            + name
+                                            + "</span>  <button type='button' name='sendBtn'>상세보기</button></div></li>";
+
+                                        // 마커들을 담을 배열에 마커 저장
+                                        markerArr.push(marker);
+                                        positionBounds.extend(markerPosition); // LatLngBounds의 객체 확장
+                                    }
+
+                                    $("#searchResult").html(innerHtml); //searchResult 결과값 노출
+                                    map.panToBounds(positionBounds); // 확장된 bounds의 중심으로 이동시키기
+                                    map.zoomOut();
+                                },
+                                error: function (request, status, error) {
+                                    console.log("code:"
+                                        + request.status + "\n"
+                                        + "message:"
+                                        + request.responseText
+                                        + "\n" + "error:" + error);
+                                }
+                            });
+                        });
+
+                    //3.길찾기 api
+                    $("#navi_without_cctv").click(function() {
+                        $.ajax({
+                            method: "POST",
+                            url: "https://apis.openapi.sk.com/tmap/routes/pedestrian?version=1&format=json&callback=result",
+                            async: false,
+                            data: {
+                                "appKey": "l7xx436a08af66a84dfe95f772da7214efb1",
+                                "startX": startLon,
+                                "startY": startLat,
+                                "endX": endLon,
+                                "endY": endLat,
+                                "reqCoordType": "WGS84GEO",
+                                "resCoordType": "EPSG3857",
+                                "startName": "출발지",
+                                "endName": "도착지"
+                            },
+                            success: function (response) {
+
+                                var resultData = response.features;
+                                var innerHtml = "";
+                                //결과 출력
+                                var tDistance = ((resultData[0].properties.totalDistance) / 1000)
+                                        .toFixed(1) + "km";
+                                var tTime = ((resultData[0].properties.totalTime) / 60)
+                                        .toFixed(0) + "분";
+
+                                innerHtml+="<div class ='result-data'>" +
+                                    "<div class ='start'><img src ='http://tmapapi.sktelecom.com/upload/tmap/marker/pin_g_m_s.png'>"+startName+"</div>" +
+                                    "<div class ='end'><img src ='http://tmapapi.sktelecom.com/upload/tmap/marker/pin_r_m_e.png'>"+endName+"</div></div>" +
+                                    "<div class ='time-distance'><div class ='time'>"
+                                    +
+                                    tTime
+                                    +
+                                    "</div><div class ='distance'>"+
+                                    tDistance
+                                    +
+                                    "</div></div>"
+
+                                $("#result").html(innerHtml);
+
+                                //기존 그려진 라인 & 마커가 있다면 초기화
+                                if (resultdrawArr.length > 0) {
+                                    for (var i in resultdrawArr) {
+                                        resultdrawArr[i]
+                                            .setMap(null);
+                                    }
+                                    resultdrawArr = [];
+                                }
+
+                                if (markerArr.length > 0) {
+                                    for (var i in markerArr) {
+                                        markerArr[i]
+                                            .setMap(null);
+                                    }
+                                    markerArr = [];
+                                }
+
+                                if (labelArr.length > 0) {
+                                    for (var i in labelArr) {
+                                        labelArr[i].setMap(null);
+                                    }
+                                    labelArr = [];
+                                }
+
+                                drawInfoArr = [];
+
+                                for (var i in resultData) { //for문 [S]
+                                    var geometry = resultData[i].geometry;
+                                    var properties = resultData[i].properties;
+                                    var polyline_;
+
+
+                                    if (geometry.type == "LineString") {
+                                        for (var j in geometry.coordinates) {
+                                            // 경로들의 결과값(구간)들을 포인트 객체로 변환
+                                            var latlng = new Tmapv2.Point(
+                                                geometry.coordinates[j][0],
+                                                geometry.coordinates[j][1]);
+                                            // 포인트 객체를 받아 좌표값으로 변환
+                                            var convertPoint = new Tmapv2.Projection.convertEPSG3857ToWGS84GEO(
+                                                latlng);
+                                            // 포인트객체의 정보로 좌표값 변환 객체로 저장
+                                            var convertChange = new Tmapv2.LatLng(
+                                                convertPoint._lat,
+                                                convertPoint._lng);
+                                            // 배열에 담기
+                                            drawInfoArr.push(convertChange);
+                                        }
+                                    } else {
+                                        var markerImg = "";
+                                        var pType = "";
+                                        var size;
+
+                                        if (properties.pointType == "S") { //출발지 마커
+                                            markerImg = "http://tmapapi.sktelecom.com/upload/tmap/marker/pin_g_m_s.png";
+                                            pType = "S";
+                                            size = new Tmapv2.Size(24, 38);
+                                        } else if (properties.pointType == "E") { //도착지 마커
+                                            markerImg = "http://tmapapi.sktelecom.com/upload/tmap/marker/pin_r_m_e.png";
+                                            pType = "E";
+                                            size = new Tmapv2.Size(24, 38);
+                                        } else { //각 포인트 마커
+                                            markerImg = "http://topopen.tmap.co.kr/imgs/point.png";
+                                            pType = "P";
+                                            size = new Tmapv2.Size(8, 8);
+                                        }
+
+                                        // 경로들의 결과값들을 포인트 객체로 변환
+                                        var latlon = new Tmapv2.Point(
+                                            geometry.coordinates[0],
+                                            geometry.coordinates[1]);
+
+                                        // 포인트 객체를 받아 좌표값으로 다시 변환
+                                        var convertPoint = new Tmapv2.Projection.convertEPSG3857ToWGS84GEO(
+                                            latlon);
+
+                                        var routeInfoObj = {
+                                            markerImage: markerImg,
+                                            lng: convertPoint._lng,
+                                            lat: convertPoint._lat,
+                                            pointType: pType
+                                        };
+
+                                        // Marker 추가
+
+                                    }
+                                }//for문 [E]
+                                drawLine(drawInfoArr);
+                            },
+                            error: function (request, status, error) {
+                                console.log("code:" + request.status + "\n"
+                                    + "message:" + request.responseText + "\n"
+                                    + "error:" + error);
+                            }
+                        });
+                    });
+
+
+                    function addComma(num) {
+                        var regexp = /\B(?=(\d{3})+(?!\d))/g;
+                        return num.toString().replace(regexp, ',');
+                    }
+
+                    function drawLine(arrPoint) {
+                        var polyline_;
+
+                        polyline_ = new Tmapv2.Polyline({
+                            path: arrPoint,
+                            strokeColor: "#dd0000",
+                            strokeWeight: 6,
+                            map: map
+                        });
+                        resultdrawArr.push(polyline_);
+                    }
+                }, function (error) {
+                    console.error(error);
+                }, {
+                    enableHighAccuracy: false,
+                    maximumAge: 0,
+                    timeout: Infinity
+                });
+            } else {
+                alert('GPS를 지원하지 않습니다');
+            }
+        }
+
+
+        // 4. POI 상세 정보 API
+        function poiDetail(poiId) {
+            console.log(poiId);
+            $.ajax({
+                method: "GET", // 요청 방식
+                url: "https://apis.openapi.sk.com/tmap/pois/"
+                    + poiId // 상세보기를 누른 아이템의 POI ID
+                    + "?version=1&resCoordType=EPSG3857&format=json&callback=result&appKey="
+                    + "l7xx436a08af66a84dfe95f772da7214efb1", // 발급받은 Appkey
+                async: false, // 동기 설정
+                success: function (response) {
+                    console.log(response);
+                    // 응답받은 POI 정보
+                    var detailInfo = response.poiDetailInfo;
+                    var name = detailInfo.name;
+                    poiName = name;
+                    var address = detailInfo.address;
+
+                    var noorLat = Number(detailInfo.frontLat);
+                    var noorLon = Number(detailInfo.frontLon);
+
+                    var pointCng = new Tmapv2.Point(noorLon, noorLat);
+                    var projectionCng = new Tmapv2.Projection.convertEPSG3857ToWGS84GEO(
+                        pointCng);
+
+                    var lat = projectionCng._lat;
+                    var lon = projectionCng._lng;
+
+                    var labelPosition = new Tmapv2.LatLng(lat, lon);
+
+                    if (labelArr.length > 0) {
+                        for (var i in labelArr) {
+                            labelArr[i].setMap(null);
+                        }
+                        labelArr = [];
+                    }
+
+                    // 상세보기 클릭 시 지도에 표출할 popup창
+                    var content = "<div class='popup' style='position: relative; display: grid; grid-template-columns: 1fr 1fr'>"
+                        + "<button type='button' class='popup_button' name='btn_start' onClick='setStartLocation("+lat+","+lon+");'>출발지</button>"
+                        + "<button type='button' class='popup_button' name='btn_end' onClick='setEndLocation("+lat+","+lon+");'>도착지</button>"
+                        + "</div>"
+
+                    var labelInfo = new Tmapv2.Label({
+                        position: labelPosition,
+                        content: content,
+                        map: map
+                    });
+                    //popup 생성
+
+                    // popup들을 담을 배열에 팝업 저장
+                    labelArr.push(labelInfo);
+                },
+                error: function (request, status, error) {
+                    console.log("code:" + request.status + "\n"
+                        + "message:" + request.responseText + "\n"
+                        + "error:" + error);
+                }
+            });
+        }
+
+        function setStartLocation(lat, lon) {
+            startName = poiName;
+            if (markersArr.length > 0) {
+                for (var i in markersArr) {
+                    markersArr[i]
+                        .setMap(null);
+                }
+                markersArr = [];
+            }
+            startLat = lat;
+            startLon = lon;
+            marker_s = new Tmapv2.Marker(
+                {
+                    position : new Tmapv2.LatLng(startLat, startLon),
+                    icon : "http://tmapapi.sktelecom.com/upload/tmap/marker/pin_g_m_s.png",
+                    iconSize : new Tmapv2.Size(24, 38),
+                    map : map
+                });
+            var popup;
+            popup = document.getElementsByClassName("popup");
+            for (i = 0; i < popup.length; i++) {
+                popup[i].style.display = "none";
+            }
+            markersArr.push(marker_s);
+
+            if (resultdrawArr.length > 0) {
+                for (var i in resultdrawArr) {
+                    resultdrawArr[i]
+                        .setMap(null);
+                }
+                resultdrawArr = [];
+            }
+
+            if (labelArr.length > 0) {
+                for (var i in labelArr) {
+                    labelArr[i].setMap(null);
+                }
+                labelArr = [];
+            }
+
+            drawInfoArr = [];
+        }
+
+        function setEndLocation(lat, lon) {
+            endName = poiName;
+            if (markereArr.length > 0) {
+                for (var i in markereArr) {
+                    markereArr[i]
+                        .setMap(null);
+                }
+                markereArr = [];
+            }
+            endLat = lat;
+            endLon = lon;
+            marker_e = new Tmapv2.Marker(
+                {
+                    position : new Tmapv2.LatLng(endLat, endLon),
+                    icon : "http://tmapapi.sktelecom.com/upload/tmap/marker/pin_r_m_e.png",
+                    iconSize : new Tmapv2.Size(24, 38),
+                    map : map
+                });
+            var popup;
+            popup = document.getElementsByClassName("popup");
+            for (i = 0; i < popup.length; i++) {
+                popup[i].style.display = "none";
+            }
+            markereArr.push(marker_e);
+
+            if (resultdrawArr.length > 0) {
+                for (var i in resultdrawArr) {
+                    resultdrawArr[i]
+                        .setMap(null);
+                }
+                resultdrawArr = [];
+            }
+
+            if (labelArr.length > 0) {
+                for (var i in labelArr) {
+                    labelArr[i].setMap(null);
+                }
+                labelArr = [];
+            }
+
+            drawInfoArr = [];
+        }
+    </script>
+</head>
+<body onload="initTmap()">
+<div th:replace="fragments/sidebar :: sidebar">
+</div>
+</body>
+</html>

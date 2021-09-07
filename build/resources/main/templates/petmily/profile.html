@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <div th:replace="fragments/header ::header"></div>
+  <title>simpleMap</title>
+  <link rel="stylesheet" type="text/css" th:href="@{/css/common.css}"/>
+  <link rel="stylesheet" type="text/css" th:href="@{/css/nav.css}"/>
+  <!-- favicon -->
+  <link rel="icon" href="img/favicon.png">
+  <link rel="instagram-icon" href="img/favicon.png">
+  <style>
+    main {
+                  width: 960px;
+                  margin: 0 auto;
+                  padding-top: 94px;
+                  padding-bottom: 40px;
+                }
+
+    .user-profile, .user-feed {
+      border: 1px solid #262626;
+    }
+
+    .user-img-profile, .user-info {
+      border: 1px solid #262626;
+      height: 375px;
+    }
+
+    .user-img-profile {
+      display: inline-block;
+      width: 310px;
+      margin-right: 34px;
+    }
+
+    .user-info {
+      display: inline-block;
+      width: 614px;
+      top: 94px;
+    }
+
+    .user-profile {
+      height: 375px;
+    }
+
+    .user-feed {
+      height: 300px;
+    }
+
+  </style>
+<body>
+<nav>
+  <div class="nav-container">
+    <div class="nav-1">
+      <img class="logo_instagram_txt" src="" alt="">
+      <a th:href="@{/petmily/home}">petmily</a>
+    </div>
+    <input id="searchInput" type="search" class="input-search" placeholder="검색">
+    <div class="nav-2">
+      <img src="" alt="홈">
+      <img src="" alt="마이페이지">
+    </div>
+  </div>
+</nav>
+<main>
+
+    <div class="user-img-profile"></div>
+    <div class="user-info"></div>
+
+  <div class="user-feed"></div>
+</main>
+</body>
+</html>

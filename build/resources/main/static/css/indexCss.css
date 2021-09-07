@@ -1,0 +1,299 @@
+@charset "utf-8";
+
+* {box-sizing: border-box}
+/* Style the tab */
+
+.sidebar {
+    height: 100%;
+    width: 70px;
+    position: fixed;
+    z-index: 2;
+    top: 0;
+    left: 0;
+    background-color: #ffffff;
+    overflow-x: hidden;
+    border-right: 1px solid #dddddd;
+}
+
+.sidebar .home-icon {
+    z-index: 2;
+    background-color: white;
+    border-bottom: 1px solid #dddddd;
+    border-right: 1px solid #dddddd;
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    width: 70px;
+}
+
+.sidebar .tab {
+    position: relative;
+    top: 89px;
+}
+/* Style the buttons inside the tab */
+.tab button, .login-button {
+    display: block;
+    background-color: inherit;
+    padding: 13px 6px 13px 6px;
+    width: 100%;
+    border: none;
+    outline: none;
+    text-align: center;
+    cursor: pointer;
+    transition: 0.3s;
+    font-size: 12px;
+}
+
+.sidebar .login-button {
+    border-top: 1px solid #dddddd;
+    border-right: 1px solid #dddddd;
+    position: fixed;
+    bottom: 0px;
+    left: 0px;
+    width: 70px;
+}
+
+.sidebar .login-button div {
+    color: royalblue;
+}
+
+.sidebar .login-button a {
+    text-decoration: none;
+}
+
+.tab button a {
+    text-decoration: none;
+    color: black;
+}
+
+.tab button div, .login-button div {
+    padding: 3px 0px 3px 0px;
+}
+
+.tab button .bar-icon, .login-button .bar-icon {
+    font-size: 20px;
+}
+
+/* Change background color of buttons on hover */
+.tab button:hover, .login-button:hover {
+    background-color: #ddd;
+}
+
+/* Create an active/current "tab button" class */
+.tab button.active {
+    background-color: royalblue;
+    color: white;
+}
+
+/* Style the tab content */
+.tabcontent {
+    height: 100%;
+    width: 370px;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    left: 70px;
+    background-color: #ffffff;
+    overflow-x: hidden;
+    transition: 0.5s;
+}
+
+/* Style the close button */
+.topright {
+    float: right;
+    cursor: pointer;
+    padding-right: 5px;
+    font-size: 28px;
+}
+
+.topright:hover {color: red;}
+
+#home-menu{
+    padding: 20px 6px 20px 6px;
+    text-align: center;
+    color: royalblue;
+    display: block;
+}
+
+#login-menu{
+    display: block;
+}
+.main {
+    margin-left: 70px; /* Same as the width of the sidenav */
+    font-size: 28px; /* Increased text to enable scrolling */
+    padding: 0px;
+}
+
+.search-box {
+    padding: 32px 22px 25px 22px;
+}
+
+.search {
+    text-align: center;
+}
+
+.search label{
+    position: relative;
+    text-align: center;
+    width: 326px;
+    margin: 0 auto;
+}
+
+.search-box input {
+    width: 100%;
+    border: 2px solid royalblue;
+    border-radius: 4px;
+    font-size: 16px;
+    background-color: white;
+    padding: 12px 20px 12px 40px;
+}
+
+.fa-search {
+    color: royalblue;
+    position: absolute;
+    left: 15px;
+    top: 20px;
+    margin: 0;
+}
+
+.fa-search:hover{
+    cursor: pointer;
+}
+
+.navi-box {
+    padding-left: 0;
+    padding-right: 0;
+    padding-bottom: 40px;
+}
+
+.form-group {
+    padding: 20px 22px 0px 22px;
+    margin-bottom: 0;
+}
+
+.result-group {
+    padding: 20px 22px 20px 22px;
+    margin-bottom: 0;
+}
+
+#result {
+    padding: 5px 22px 5px 22px;
+    margin-bottom: 0;
+}
+
+#result .time-distance {
+    display: grid;
+    grid-template-columns: 70px 1fr;
+}
+
+.time-distance .time {
+    text-align: center;
+    font-size: 30px;
+    font-weight: bold;
+    color: royalblue;
+    padding-right: 4px;
+}
+
+.time-distance .distance {
+    padding-left: 8px;
+    border-left: 1px solid #ddd;
+}
+
+.result-data {
+    color : #505050;
+}
+
+.result-data img {
+    padding-right: 7px;
+}
+
+.form-group input {
+    height: 42px;
+    width: 100%;
+    border: 2px solid royalblue;
+    border-radius: 4px;
+    font-size: 16px;
+    background-color: white;
+    padding: 12px 20px 12px 40px;
+}
+
+.button-group {
+    display: grid;
+    padding: 20px 0px 20px 0px;
+    grid-template-columns: 1fr 90px;
+    border-bottom: 1px solid #dddddd;
+}
+
+.button-group button {
+    color: #505050;
+    width: 90px;
+    background-color: white;
+    border-radius: 4px;
+    box-sizing: border-box;
+    border: 1px solid #dddddd;
+}
+
+.result-group .title {
+    padding-bottom: 7px;
+    border-bottom: 1px solid #dddddd;
+}
+
+.result-group .rst_wrap {
+    padding-top: 7px;
+    padding-left: 7px;
+}
+
+ul {
+    list-style: none;
+    padding-left: 0px;
+}
+
+.rst li {
+    cursor: pointer;
+}
+
+.rst img {
+    width: 17px;
+}
+
+.rst li span {
+    font-size: 13px;
+    color: #505050;
+    padding: 0px 4px;
+}
+
+.rst li span:hover {
+    font-weight: bold;
+}
+
+.rst li button {
+    color: #505050;
+    font-size: 11px;
+    background-color: white;
+    border-radius: 4px;
+    box-sizing: border-box;
+    border: 1px solid #dddddd;
+}
+
+.rst li button:hover {
+    background-color: #ddd;
+}
+
+.popup_button {
+    width: 70px;
+    color: #505050;
+    font-size: 17px;
+    font-weight: bold;
+    position: relative;
+    background-color: white;
+    border-radius: 4px;
+    box-sizing: border-box;
+    border: 1px solid #dddddd;
+}
+
+.popup_button:hover {
+    cursor: pointer;
+    background-color: royalblue;
+    color: white;
+    border: 1px solid #4169e1;
+}

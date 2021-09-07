@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <title>simpleMap</title>
+  <script src="https://apis.openapi.sk.com/tmap/jsv2?version=1&appKey=l7xx436a08af66a84dfe95f772da7214efb1"></script>
+  <script th:inline = "javascript">
+    function initTmap(){
+      var map = new Tmapv2.Map("map_div",
+              {
+                center: new Tmapv2.LatLng(37.490860,127.113426), // 지도 초기 좌표
+                width: "100%",
+                height: "800px",
+                zoom: 16
+              });
+      /*<![CDATA[*/
+      /*[# th:each="cctv : ${cctvs}"]*/
+      var marker = new Tmapv2.Marker({
+        position: new Tmapv2.LatLng(/*[[${cctv.latitude}]]*/,/*[[${cctv.longitude}]]*/),
+        map: map
+      });
+      /*[/]*/
+      /*]]>*/
+    }
+  </script>
+</head>
+<body onload="initTmap()">
+<div id="map_div">
+</div>
+</body>
+</html>

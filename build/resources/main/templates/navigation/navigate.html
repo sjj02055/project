@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <div th:replace="fragments/header ::header"></div>
+    <title>simpleMap</title>
+    <script type="text/javascript">
+        var map, marker;
+        var markerArr = [], labelArr = [];
+        var startLat,startLon,endLat,endLon;
+
+        function initTmap() {
+            // 1. 지도 띄우기
+            map = new Tmapv2.Map("map_div", {
+                center: new Tmapv2.LatLng(37.570028, 126.986072),
+                width: "100%",
+                height: "100vh",
+                zoom: 15,
+                zoomControl: true,
+                scrollwheel: true
+            });
+
+        }
+    </script>
+<body onload="initTmap();">
+<div class="sidebar">
+    <div class="home-icon sidebar-size">
+        <a href="/member/login" class="fas fa-walking fa-3x bar-icon" id="home-menu"></a>
+    </div>
+    <div class="tab sidebar-size" id="scroll">
+        <button class="tablinks" onclick="openMenu(event, 'Home')" id="defaultOpen">
+            <a>
+                <div>
+                    <i class="fas fa-map-marker-alt fa-lg bar-icon"></i>
+                </div>
+                <div>
+                    지도 홈
+                </div>
+            </a>
+        </button>
+        <button class="tablinks" onclick="openMenu(event, 'Search')">
+            <a href="/navigation/a_navigate">
+                <div>
+                    <i class="fas fa-long-arrow-alt-up fa-lg bar-icon"></i>
+                </div>
+                <div>
+                    길찾기
+                </div>
+            </a>
+        </button>
+        <button class="tablinks" onclick="openMenu(event, 'Cctv')">
+            <a href="#">
+                <div>
+                    <i class="fas fa-video fa-lg bar-icon"></i>
+                </div>
+                <div>
+                    CCTV
+                </div>
+            </a>
+        </button>
+        <button class="tablinks" onclick="openMenu(event, 'Memo')">
+            <a>
+                <div>
+                    <i class="far fa-calendar-minus fa-lg bar-icon"></i>
+                </div>
+                <div>
+                    기록
+                </div>
+            </a>
+        </button>
+    </div>
+    <button class="login-button sidebar-size">
+        <a href="/member/create" id="login-menu">
+            <div>
+                <i class="fas fa-user fa-lg bar-icon"></i>
+            </div>
+        </a>
+    </button>
+</div>
+<div id="Memo" class="tabcontent">
+    <span onclick="this.parentElement.style.display = 'none'" class="topright">&times</span>
+    <div class="content">
+        <h1>4</h1>
+    </div>
+</div>
+
+<div id="Home" class="tabcontent">
+    <span onclick="this.parentElement.style.display = 'none'" class="topright">&times</span>
+    <div class="search-box">
+        <form id="search-form" class="search" action="" method="post">
+            <label for="content-search"><i class="fas fa-search"></i>
+                <input type="text" name="search" id="content-search" placeholder="장소, 도로 검색"></label>
+        </form>
+    </div>
+    <div style="width:370px; height:150px; background-color: lightblue">
+        <a>날씨자리</a>
+    </div>
+    <div style="width:370px; height:150px; margin-top: 30px; background-color: darkseagreen">
+        <a>공원</a>
+    </div>
+</div>
+
+<script>
+    function openMenu(evt, menuName) {
+        var i, tabcontent, tablinks;
+        tabcontent = document.getElementsByClassName("tabcontent");
+        for (i = 0; i < tabcontent.length; i++) {
+            tabcontent[i].style.display = "none";
+        }
+        tablinks = document.getElementsByClassName("tablinks");
+        for (i = 0; i < tablinks.length; i++) {
+            tablinks[i].className = tablinks[i].className.replace(" active", "");
+        }
+        document.getElementById(menuName).style.display = "block";
+        evt.currentTarget.className += " active";
+    }
+
+    // Get the element with id="defaultOpen" and click on it
+    document.getElementById("defaultOpen").click();
+</script>
+<div class="main">
+    <div id="map_div"></div><!-- 지도 -->
+</div>
+</body>
+</html>
