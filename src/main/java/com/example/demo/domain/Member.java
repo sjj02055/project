@@ -29,4 +29,6 @@ public class Member {
 
     private int year,month,day;
 
+    private String profile_photo;
+
 }

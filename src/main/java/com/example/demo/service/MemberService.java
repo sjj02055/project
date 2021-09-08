@@ -52,4 +52,11 @@ public class MemberService {
         }
     }
 
+    public void imgUpdate(String userId, String profile_photo){
+        Member findMember = memberRepository.findOneByUserId(userId).get();
+        findMember.setProfile_photo(profile_photo);
+
+        memberRepository.save(findMember);
+    }
+
 }

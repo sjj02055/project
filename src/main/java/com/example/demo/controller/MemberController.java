@@ -99,6 +99,10 @@ public class MemberController {
         return "redirect:/";
     }
 
+    @GetMapping("/update/profile_photo")
+    public String updatePhoto(HttpServletRequest request,)
+
+
 
     @Data
     private class createForm {
