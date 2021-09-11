@@ -10,11 +10,14 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
+import java.io.File;
+import java.io.IOException;
 
 @Slf4j
 @Controller
@@ -99,10 +102,36 @@ public class MemberController {
         return "redirect:/";
     }
 
+    //프로필사진 업로드
+
     @GetMapping("/update/profile_photo")
-    public String updatePhoto(HttpServletRequest request,)
+    public String updatePhoto(@SessionAttribute(value = "loginMember", required = false) Member loginMember,Model model){
 
+        model.addAttribute("loginMember", loginMember);
+        return "member/update/profilePhoto";
+    }
 
+    @PostMapping("/update/profile_photo")
+    public String insertPhoto(HttpServletRequest request, @RequestParam("filename")MultipartFile mFile ){
+        String upload_path = "C:\\Users\\sjj02\\Desktop\\project\\project\\src\\main\\resources\\static\\images";
+        HttpSession session = request.getSession(false);
+        Member loginMember = (Member)session.getAttribute("loginMember");
+
+        log.info("ㅇㅇㅇ");
+
+        try{
+            if(loginMember.getProfile_photo()!= null){
+                File file = new File(upload_path + loginMember.getProfile_photo());
+                file.delete();
+            }
+            mFile.transferTo(new File(upload_path + mFile.getOriginalFilename()));;
+        } catch(IllegalStateException | IOException e){
+            e.printStackTrace();
+        }
+
+        memberService.imgUpdate(loginMember.getUserId(), mFile.getOriginalFilename());
+        return "member/update/profilePhoto";
+    }
 
     @Data
     private class createForm {
