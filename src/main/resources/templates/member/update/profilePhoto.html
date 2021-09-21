@@ -14,17 +14,17 @@
 <div class="contents">
     <div class="img">
         <div class="title_image">
-            <div th:if="${loginMember.getProfile_photo()==null}">
+            <div th:if="${loginMember.profile_photo == null}">
                 <img src="/images/noimage.png" >
             </div>
-            <div th:unless="${loginMember.getProfile_photo()==null}">
-                <img src="/images/profile/${findMember.getProfile_photo}">
+            <div th:unless="${loginMember.profile_photo == null}">
+                <img th:src="@{/images/profile/{photo}(photo=${loginMember.getProfile_photo})}">
             </div>
         </div>
     </div>
     <div>
         <form action="/member/update/profile_photo" th:field="form"
-              method="post" autocomplete="off">
+              method="post" enctype="multipart/form-data" autocomplete="off">
             <label for="ex_file">프로필 사진 바꾸기</label>
             <input type="file" id="ex_file" name="filename" required />
             <button type="submit" class="btn btn-default">업로드</button>

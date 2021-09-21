@@ -112,12 +112,14 @@ public class MemberController {
     }
 
     @PostMapping("/update/profile_photo")
-    public String insertPhoto(HttpServletRequest request, @RequestParam("filename")MultipartFile mFile ){
-        String upload_path = "C:\\Users\\sjj02\\Desktop\\project\\project\\src\\main\\resources\\static\\images";
+    public String insertPhoto(@RequestParam("filename") MultipartFile mFile, HttpServletRequest request) throws IOException{
+
+        String upload_path = "C:\\Users\\sjj02\\Desktop\\project\\project\\src\\main\\resources\\static\\images\\profile\\";
         HttpSession session = request.getSession(false);
         Member loginMember = (Member)session.getAttribute("loginMember");
 
-        log.info("ㅇㅇㅇ");
+        log.info("request={}", request);
+        log.info("multipartFile={}", mFile);
 
         try{
             if(loginMember.getProfile_photo()!= null){
@@ -129,8 +131,10 @@ public class MemberController {
             e.printStackTrace();
         }
 
-        memberService.imgUpdate(loginMember.getUserId(), mFile.getOriginalFilename());
-        return "member/update/profilePhoto";
+
+        memberService.imgUpdate(loginMember.getId(), mFile.getOriginalFilename());
+        log.info("photo={}", loginMember.getProfile_photo());
+        return "redirect:/";
     }
 
     @Data

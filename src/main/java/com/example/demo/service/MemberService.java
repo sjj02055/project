@@ -35,8 +35,10 @@ public class MemberService {
         return memberRepository.findAll();
     }
     //회원 한명 조회
-    public Member findOne(Long memberId){
-        return memberRepository.findOne(memberId);
+    public Member findOne(String memberId){
+        Member findMember = memberRepository.findOneByUserId(memberId).orElse(null);
+
+        return findMember;
     }
 
     public Member login(String userId, String password){
@@ -52,11 +54,10 @@ public class MemberService {
         }
     }
 
-    public void imgUpdate(String userId, String profile_photo){
-        Member findMember = memberRepository.findOneByUserId(userId).get();
+    @Transactional
+    public void imgUpdate(Long id, String profile_photo){
+        Member findMember = memberRepository.findOne(id);
         findMember.setProfile_photo(profile_photo);
-
-        memberRepository.save(findMember);
     }
 
 }

@@ -32,10 +32,10 @@
     <article>
       <header>
         <div class="profile-of-article">
-          <img class="img-profile pic" src="" alt="">
+          <img class="img-profile pic" th:src="@{/images/profile/{photo}(photo=${member.getProfile_photo})}" alt="">
           <span class="userID main-id point-span" th:text="|${member.nickname}님 환영합니다.|">아이디</span>
           <form th:action="@{/member/logout}" method="post">
-            <button type="submit" th:onclick="|location.href ='@{member/login}'|">로그아웃</button>
+            <button type="submit" th:onclick="|location.href='@{member/login}'|">로그아웃</button>
           </form>
         </div>
         <img class="icon-react icon-more" src="https://s3.ap-northeast-2.amazonaws.com/cdn.wecode.co.kr/bearu/more.png" alt="more">
@@ -83,7 +83,7 @@
   <!-- main-right -->
   <div class="main-right">
     <div class="myProfile">
-      <img class="pic" src="" alt="">
+      <img class="pic" th:src="@{/images/profile/{photo}(photo=${member.getProfile_photo})}" alt="">
       <div>
         <a class="userID point-span" th:href="@{/petmily/profile}" th:text="|${member.nickname}|">사용자아이디</a>
         <span class="sub-span" th:text="|${member.name}|">이름</span>
