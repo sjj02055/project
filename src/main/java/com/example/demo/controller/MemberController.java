@@ -118,9 +118,6 @@ public class MemberController {
         HttpSession session = request.getSession(false);
         Member loginMember = (Member)session.getAttribute("loginMember");
 
-        log.info("request={}", request);
-        log.info("multipartFile={}", mFile);
-
         try{
             if(loginMember.getProfile_photo()!= null){
                 File file = new File(upload_path + loginMember.getProfile_photo());
@@ -130,10 +127,14 @@ public class MemberController {
         } catch(IllegalStateException | IOException e){
             e.printStackTrace();
         }
-
-
         memberService.imgUpdate(loginMember.getId(), mFile.getOriginalFilename());
-        log.info("photo={}", loginMember.getProfile_photo());
+        Member tempMember = memberService.find(loginMember.getId());
+        if(session!=null){
+            session.invalidate();
+        }
+        session = request.getSession();
+        session.setAttribute("loginMember",tempMember);
+
         return "redirect:/";
     }
 

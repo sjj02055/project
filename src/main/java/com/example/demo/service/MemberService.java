@@ -41,6 +41,11 @@ public class MemberService {
         return findMember;
     }
 
+    public Member find(Long id){
+        Member findMember = memberRepository.findOne(id);
+        return findMember;
+    }
+
     public Member login(String userId, String password){
 
         Member findMember = memberRepository.findOneByUserId(userId)
