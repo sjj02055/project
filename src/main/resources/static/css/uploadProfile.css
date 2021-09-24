@@ -1,0 +1,21 @@
+.img-profile {
+    width: 200px;
+    height: 200px;
+    border: 1px solid #fafafa;
+    border-radius: 100%;
+    display: block;
+    margin: 0 auto;
+}
+
+.pic {
+    border-radius: 100%;
+}
+
+.upload {
+    text-align: center;
+    margin-top: 27px;
+}
+
+.contents {
+    margin-top: 40px;
+}

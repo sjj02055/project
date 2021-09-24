@@ -1,7 +1,7 @@
 com/example/demo/domain/Member.java
  com.example.demo.domain.Member
-com/example/demo/controller/ApiController.java
- com.example.demo.controller.ApiController
+com/example/demo/service/MemberService.java
+ com.example.demo.service.MemberService
 com/example/demo/domain/loginForm.java
  com.example.demo.domain.loginForm
 com/example/demo/controller/HomeController.java
@@ -20,8 +20,9 @@ com/example/demo/DemoApplication.java
  com.example.demo.DemoApplication
 com/example/demo/service/apiService.java
  com.example.demo.service.apiService
-com/example/demo/service/MemberService.java
- com.example.demo.service.MemberService
+com/example/demo/controller/ApiController.java
+ com.example.demo.controller.ApiController
 com/example/demo/controller/MemberController.java
  com.example.demo.controller.MemberController
  com.example.demo.controller.MemberController$createForm
+ com.example.demo.controller.MemberController$updateForm

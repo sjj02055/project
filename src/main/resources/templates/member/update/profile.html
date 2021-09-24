@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <div th:replace="fragments/header ::header"></div>
+    <title>Instagram</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/uploadProfile.css}"/>>
+    <!-- favicon -->
+    <link rel="icon" href="img/favicon.png">
+    <link rel="instagram-icon" href="img/favicon.png">
+</head>
+<body>
+
+<div class="contents">
+    <div class="img">
+        <div class="title_image">
+            <div th:if="${loginMember.profile_photo == null}">
+                <img class="img-profile pic" src="/images/noimage.png" >
+            </div>
+            <div th:unless="${loginMember.profile_photo == null}">
+                <img class="img-profile pic" th:src="@{/images/profile/{photo}(photo=${loginMember.getProfile_photo})}">
+            </div>
+        </div>
+    </div>
+    <div>
+        <form class="upload" action="/member/update/profile_photo" th:field="form"
+              method="post" enctype="multipart/form-data" autocomplete="off">
+            <div><label for="ex_file">프로필 사진 바꾸기</label></div>
+            <div><input type="file" id="ex_file" name="filename" required />
+            <button type="submit" class="btn btn-default">업로드</button></div>
+        </form>
+    </div>
+</div>
+
+<div class="info">
+    <form action="/member/update/profile" method="post" th:object="${updateForm}">
+        <div class="form-group">
+            <label for="name">이름</label>
+            <input type="text" class="form-control w200" id="name"
+                   th:field="*{name}" placeholder="이름" th:value="${loginMember.name}" />
+        </div>
+        <div class="form-group">
+            <label for="nickname">닉네임</label>
+            <input type="text" class="form-control w200" id="nickname"
+                   th:field="*{nickname}" placeholder="닉네임" th:value="${loginMember.nickname}" />
+        </div>
+        <div class="form-group">
+            <label for="introduce">소개</label>
+            <input type="text" class="form-control w200" id="introduce"
+                   th:field="*{introduce}" placeholder="소개" th:value="${loginMember.introduce}" />
+        </div>
+        <button type="submit" class="btn btn-default">완료</button>
+    </form>
+</div>
+</body>
+</html>

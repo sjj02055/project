@@ -31,4 +31,6 @@ public class Member {
 
     private String profile_photo;
 
+    private String introduce;
+
 }

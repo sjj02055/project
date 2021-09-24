@@ -63,6 +63,18 @@ public class MemberService {
     public void imgUpdate(Long id, String profile_photo){
         Member findMember = memberRepository.findOne(id);
         findMember.setProfile_photo(profile_photo);
+        memberRepository.save(findMember);
+    }
+
+    @Transactional
+    public void update(Member member){
+        Member findMember = memberRepository.findOne(member.getId());
+        findMember.setIntroduce(member.getIntroduce());
+        findMember.setNickname(member.getNickname());
+        findMember.setName(member.getName());
+
+        memberRepository.save(findMember);
+
     }
 
 }

@@ -102,15 +102,6 @@ public class MemberController {
         return "redirect:/";
     }
 
-    //프로필사진 업로드
-
-    @GetMapping("/update/profile_photo")
-    public String updatePhoto(@SessionAttribute(value = "loginMember", required = false) Member loginMember,Model model){
-
-        model.addAttribute("loginMember", loginMember);
-        return "member/update/profilePhoto";
-    }
-
     @PostMapping("/update/profile_photo")
     public String insertPhoto(@RequestParam("filename") MultipartFile mFile, HttpServletRequest request) throws IOException{
 
@@ -134,8 +125,36 @@ public class MemberController {
         }
         session = request.getSession();
         session.setAttribute("loginMember",tempMember);
+        return "member/update/profile";
+    }
 
-        return "redirect:/";
+    @GetMapping("update/profile")
+    public String update(@SessionAttribute(value="loginMember", required = false) Member loginMember, Model model){
+        model.addAttribute("loginMember", loginMember);
+        model.addAttribute("updateForm", new updateForm());
+        return "member/update/profile";
+    }
+
+    @PostMapping("update/profile")
+    public String update(@Valid @ModelAttribute updateForm form, BindingResult result, HttpServletRequest request){
+        if(result.hasErrors()){
+            return "member/update/profile";
+        }
+        HttpSession session =request.getSession(false);
+        Member loginMember = (Member)session.getAttribute("loginMember");
+
+        loginMember.setName(form.getName());
+        loginMember.setNickname(form.getNickname());
+        loginMember.setIntroduce(form.getIntroduce());
+
+        memberService.update(loginMember);
+        Member tempMember = memberService.find(loginMember.getId());
+        if(session!=null){
+            session.invalidate();
+        }
+        session = request.getSession();
+        session.setAttribute("loginMember",tempMember);
+        return "petmily/profile";
     }
 
     @Data
@@ -158,5 +177,16 @@ public class MemberController {
 
         private int year,month,day;
 
+    }
+
+    @Data
+    private class updateForm{
+        @NotBlank(message = "닉네임 입력은 필수입니다.")
+        private String nickname;
+
+        @NotBlank(message = "이름 입력은 필수입니다.")
+        private String name;
+
+        private String introduce;
     }
 }
