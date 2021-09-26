@@ -6,8 +6,10 @@ com/example/demo/controller/ApiController.java
  com.example.demo.controller.ApiController
 com/example/demo/domain/loginForm.java
  com.example.demo.domain.loginForm
-com/example/demo/service/apiService.java
- com.example.demo.service.apiService
+com/example/demo/controller/MemberController.java
+ com.example.demo.controller.MemberController
+ com.example.demo.controller.MemberController$createForm
+ com.example.demo.controller.MemberController$updateForm
 com/example/demo/domain/Post.java
  com.example.demo.domain.Post
 com/example/demo/domain/Post_image.java
@@ -20,10 +22,8 @@ com/example/demo/service/naviService.java
  com.example.demo.service.naviService
 com/example/demo/domain/cctv.java
  com.example.demo.domain.cctv
-com/example/demo/controller/MemberController.java
- com.example.demo.controller.MemberController
- com.example.demo.controller.MemberController$createForm
- com.example.demo.controller.MemberController$updateForm
+com/example/demo/service/apiService.java
+ com.example.demo.service.apiService
 com/example/demo/controller/naviController.java
  com.example.demo.controller.naviController
 com/example/demo/DemoApplication.java

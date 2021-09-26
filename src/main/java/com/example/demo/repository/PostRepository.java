@@ -27,9 +27,8 @@ public class PostRepository {
                 .getResultList();
     }
 
-    public List<Post_image> findByPostId(long id){
-        return em.createQuery("select p from Post_image p where p.id =: id", Post_image.class)
-                .setParameter("id",id)
+    public List<Post_image> findByPostId(){
+        return em.createQuery("select p from Post_image p", Post_image.class)
                 .getResultList();
     }
 

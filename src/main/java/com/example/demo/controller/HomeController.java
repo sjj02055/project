@@ -35,6 +35,7 @@ public class HomeController {
             return "index";
         }
         model.addAttribute("posting", postService.findByUserIdOrderByIdDesc(loginMember.getId()));
+        model.addAttribute("img", postService.findByPostid());
         model.addAttribute("member", loginMember);
         return "petmily/home";
     }
@@ -67,7 +68,8 @@ public class HomeController {
         if(loginMember == null){
             return "member/loginMember";
         }
-        model.addAttribute("member", loginMember);
+        model.addAttribute("post", new Post());
+        model.addAttribute("loginMember", loginMember);
         return "petmily/upload";
     }
 
@@ -76,9 +78,11 @@ public class HomeController {
 
         HttpSession session = request.getSession(false);
         Member loginMember = (Member)session.getAttribute("loginMember");
-        String path = "C:\\Users\\sjj02\\Desktop\\project\\project\\src\\main\\resources\\static\\images\\" + loginMember.getUserId();
+        String path = "C:\\Users\\sjj02\\Desktop\\project\\petmily_3_3\\src\\main\\resources\\static\\images\\" + loginMember.getUserId();
 
         File file = new File(path);
+        log.info("loginMember={}",loginMember.getUserId());
+        log.info("path={}",path);
         if(!file.exists()){
             file.mkdirs();
         }
@@ -93,7 +97,7 @@ public class HomeController {
 
         post.setId(postService.save(post));
 
-        List<MultipartFile> fileList = mtpRequest.getFiles("fiels");
+        List<MultipartFile> fileList = mtpRequest.getFiles("files");
         for(MultipartFile f : fileList){
             Post_image pi = new Post_image();
 

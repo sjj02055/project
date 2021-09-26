@@ -8,8 +8,8 @@
 <body>
 <div class="contents">
     <!-- 2장이상의 사진을 저장하려면 enctype="multipart/form-data" 필수  -->
-    <form action="/petmily/upload" method="post" enctype="multipart/form-data" autocomplete="off" th:object="${member}">
-        <input type="hidden" th:field="userId" th:value="${member.getUserId()}">
+    <form action="/petmily/upload" method="post" enctype="multipart/form-data" autocomplete="off" th:object="${post}">
+        <input type="hidden" th:field="*{member.userId}" th:value="${loginMember.getUserId()}">
         <div class="form-group">
             <label for="gdsImg">파일 업로드 </label>
             <input multiple="multiple" type="file" id="gdsImg" name="files" required />
@@ -52,11 +52,11 @@
         </div>
 
         <div class="form-group">
-            <input type="text" class="form-control w300" th:field="description" placeholder="문구 입력..." />
+            <input type="text" class="form-control w300" th:field="*{description}" placeholder="문구 입력..." />
         </div>
 
         <div class="form-group">
-            <input type="text" class="form-control w200" th:field="location" placeholder="위치 추가" />
+            <input type="text" class="form-control w200" th:field="*{location}" placeholder="위치 추가" />
         </div>
         <button class="btn btn-primary">완료</button>
     </form>

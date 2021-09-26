@@ -18,11 +18,13 @@ public class PostService {
 
     private final PostRepository postRepository;
 
+    @Transactional
     public Long save(Post p){
         postRepository.save(p);
         return p.getId();
     }
 
+    @Transactional
     public Long piSave(Post_image p){
         postRepository.piSave(p);
         return p.getId();
@@ -32,8 +34,8 @@ public class PostService {
         return postRepository.findByUserIdOrderByIdDesc(id);
     }
 
-    public List<Post_image> findByPostid(long id){
-        return postRepository.findByPostId(id);
+    public List<Post_image> findByPostid(){
+        return postRepository.findByPostId();
     }
 
 }
