@@ -8,7 +8,7 @@
 <body>
 <div class="contents">
     <!-- 2장이상의 사진을 저장하려면 enctype="multipart/form-data" 필수  -->
-    <form action="/petmily/upload" method="post" enctype="multipart/form-data" autocomplete="off" th:object="member">
+    <form action="/petmily/upload" method="post" enctype="multipart/form-data" autocomplete="off" th:object="${member}">
         <input type="hidden" th:field="userId" th:value="${member.getUserId()}">
         <div class="form-group">
             <label for="gdsImg">파일 업로드 </label>

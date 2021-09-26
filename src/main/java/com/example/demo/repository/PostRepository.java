@@ -23,11 +23,13 @@ public class PostRepository {
     }
     public List<Post> findByUserIdOrderByIdDesc(long id){
         return em.createQuery("select p from Post p where p.member.id=:id" , Post.class)
+                .setParameter("id",id)
                 .getResultList();
     }
 
     public List<Post_image> findByPostId(long id){
         return em.createQuery("select p from Post_image p where p.id =: id", Post_image.class)
+                .setParameter("id",id)
                 .getResultList();
     }
 
