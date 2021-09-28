@@ -78,7 +78,7 @@ public class HomeController {
 
         HttpSession session = request.getSession(false);
         Member loginMember = (Member)session.getAttribute("loginMember");
-        String path = "C:\\Users\\sjj02\\Desktop\\project\\petmily_3_3\\src\\main\\resources\\static\\images\\" + loginMember.getUserId();
+        String path = "C:\\Users\\sjj02\\Desktop\\project\\project\\src\\main\\resources\\static\\images\\" + loginMember.getUserId();
 
         File file = new File(path);
         log.info("loginMember={}",loginMember.getUserId());

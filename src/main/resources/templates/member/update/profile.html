@@ -14,7 +14,7 @@
     <div class="img">
         <div class="title_image">
             <div th:if="${loginMember.profile_photo == null}">
-                <img class="img-profile pic" src="/images/noimage.png" >
+                <img class="img-profile pic" th:src="@{/images/noimage.png}" >
             </div>
             <div th:unless="${loginMember.profile_photo == null}">
                 <img class="img-profile pic" th:src="@{/images/profile/{photo}(photo=${loginMember.getProfile_photo})}">

@@ -129,7 +129,8 @@ public class MemberController {
     }
 
     @GetMapping("update/profile")
-    public String update(@SessionAttribute(value="loginMember", required = false) Member loginMember, Model model){
+    public String update(@SessionAttribute(name="loginMember", required = false) Member loginMember,
+                         Model model){
         model.addAttribute("loginMember", loginMember);
         model.addAttribute("updateForm", new updateForm());
         return "member/update/profile";

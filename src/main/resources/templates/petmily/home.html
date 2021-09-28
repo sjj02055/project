@@ -41,7 +41,7 @@
       </header>
       <div class="main-image" th:each="img : ${img}">
         <ul th:if="${img.postId == p.id}">
-        <img th:src="@{/images/{userId}(userId=${p.member.userId})/{filename}(filename=${img.filename})" class="mainPic">
+        <img th:src="@{/images/{userId}/{filename}(userId=${p.member.userId},filename=${img.filename})}" class="mainPic">
         </ul>
       </div>
       <div class="icons-react">
