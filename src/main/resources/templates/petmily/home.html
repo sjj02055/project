@@ -16,12 +16,16 @@
   <div class="nav-container">
     <div class="nav-1">
       <img class="logo_instagram_txt" src="" alt="">
-      <a th:href="@{/petmily/home}">petmily</a>
+      <a th:href="@{/}">petmily</a>
     </div>
     <input id="searchInput" type="search" class="input-search" placeholder="검색">
     <div class="nav-2">
-      <img src="" alt="홈">
-      <img src="" alt="마이페이지">
+      <a th:href="@{petmily/upload}">
+      <img src="" alt="업로드">
+      </a>
+      <a th:href="@{petmily/profile}">
+      <img src="" alt="프로필">
+      </a>
     </div>
   </div>
 </nav>

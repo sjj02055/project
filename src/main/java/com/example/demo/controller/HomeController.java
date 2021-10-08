@@ -3,21 +3,22 @@ package com.example.demo.controller;
 import com.example.demo.domain.Member;
 import com.example.demo.domain.Post;
 import com.example.demo.domain.Post_image;
+import com.example.demo.service.MemberService;
 import com.example.demo.service.PostService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.FileCopyUtils;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.SessionAttribute;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.File;
+import java.sql.Time;
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.UUID;
 
@@ -27,13 +28,15 @@ import java.util.UUID;
 public class HomeController {
 
     private final PostService postService;
+    private final MemberService memberService;
 
     @GetMapping("/")
     public String goHomeV2(@SessionAttribute(name= "loginMember", required = false)
-                           Member loginMember, Model model){
-        if(loginMember ==null){
+                           Member loginMember, Model model, HttpServletRequest request){
+        if(loginMember == null){
             return "index";
         }
+
         model.addAttribute("posting", postService.findByUserIdOrderByIdDesc(loginMember.getId()));
         model.addAttribute("img", postService.findByPostid());
         model.addAttribute("member", loginMember);
@@ -88,12 +91,14 @@ public class HomeController {
         }
 
         Post post = new Post();
+        Timestamp timestamp = new Timestamp(System.currentTimeMillis());
         String description = request.getParameter("description");
         String location = request.getParameter("location");
 
         post.setDescription(description);
         post.setLocation(location);
         post.setMember(loginMember);
+        post.setCreate_date(timestamp);
 
         post.setId(postService.save(post));
 
@@ -114,6 +119,12 @@ public class HomeController {
         return "redirect:/";
 
     }
+
+    /*@ResponseBody
+    @GetMapping("/images/{userId}/{filename}")
+    public Resource downloadImage(@PathVariable String filename, @PathVariable String userId) throws MalformedURLException {
+        return new UrlResource("file:" + userId +"\\"+ filename);
+    }*/
 
     private String rnd(String originalName, byte[] fileData, String path) throws Exception {
         UUID uuid = UUID.randomUUID();
