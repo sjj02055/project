@@ -3,12 +3,14 @@ package com.example.demo.repository;
 import com.example.demo.domain.Post;
 import com.example.demo.domain.Post_image;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import java.util.List;
 
 @Repository
+@Slf4j
 @RequiredArgsConstructor
 public class PostRepository {
 
@@ -22,7 +24,7 @@ public class PostRepository {
         em.persist(pi);
     }
     public List<Post> findByUserIdOrderByIdDesc(long id){
-        return em.createQuery("select p from Post p where p.member.id=:id" , Post.class)
+        return em.createQuery("select p from Post p where p.member.id=:id ORDER BY p.id DESC " , Post.class)
                 .setParameter("id",id)
                 .getResultList();
     }

@@ -43,7 +43,7 @@ public class HomeController {
         return "petmily/home";
     }
 
-    @GetMapping("/petmily/home")
+    /*@GetMapping("/petmily/home")*/
     public String goHome(@SessionAttribute(name = "loginMember", required = false)
                                      Member loginMember, Model model) {
         if(loginMember == null){
@@ -51,6 +51,7 @@ public class HomeController {
         }
 
         model.addAttribute("posting", postService.findByUserIdOrderByIdDesc(loginMember.getId()));
+        log.info("ㅇㅅㅇ");
         model.addAttribute("member", loginMember);
         return "/petmily/home";
     }
