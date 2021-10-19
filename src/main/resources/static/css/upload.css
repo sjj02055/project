@@ -1,0 +1,27 @@
+.form-group {
+    width: 550px;
+    margin: auto;
+}
+
+.select_img {
+    display: block;
+    margin: 0 auto;
+}
+
+.title_img {
+    display: block;
+    margin: 0 auto;
+}
+
+.form {
+    text-align: center;
+}
+
+.orderOpen {
+    text-align: center;
+}
+
+.btttn {
+    text-align: center;
+    margin-top: 10px;
+}

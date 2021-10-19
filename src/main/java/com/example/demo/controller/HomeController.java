@@ -7,6 +7,9 @@ import com.example.demo.service.MemberService;
 import com.example.demo.service.PostService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.FileCopyUtils;
@@ -17,6 +20,7 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.File;
+import java.net.MalformedURLException;
 import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.List;
@@ -30,6 +34,10 @@ public class HomeController {
     private final PostService postService;
     private final MemberService memberService;
 
+    @Value("${file.dir}")
+    private String fileDir;
+
+
     @GetMapping("/")
     public String goHomeV2(@SessionAttribute(name= "loginMember", required = false)
                            Member loginMember, Model model, HttpServletRequest request){
@@ -41,19 +49,6 @@ public class HomeController {
         model.addAttribute("img", postService.findByPostid());
         model.addAttribute("member", loginMember);
         return "petmily/home";
-    }
-
-    /*@GetMapping("/petmily/home")*/
-    public String goHome(@SessionAttribute(name = "loginMember", required = false)
-                                     Member loginMember, Model model) {
-        if(loginMember == null){
-            return "member/loginMember";
-        }
-
-        model.addAttribute("posting", postService.findByUserIdOrderByIdDesc(loginMember.getId()));
-        log.info("ㅇㅅㅇ");
-        model.addAttribute("member", loginMember);
-        return "/petmily/home";
     }
 
     @GetMapping("/petmily/profile")
@@ -82,7 +77,7 @@ public class HomeController {
 
         HttpSession session = request.getSession(false);
         Member loginMember = (Member)session.getAttribute("loginMember");
-        String path = "C:\\Users\\sjj02\\Desktop\\project\\project\\src\\main\\resources\\static\\images\\" + loginMember.getUserId();
+        String path = fileDir + loginMember.getUserId();
 
         File file = new File(path);
         log.info("loginMember={}",loginMember.getUserId());
@@ -121,11 +116,11 @@ public class HomeController {
 
     }
 
-    /*@ResponseBody
+    @ResponseBody
     @GetMapping("/images/{userId}/{filename}")
     public Resource downloadImage(@PathVariable String filename, @PathVariable String userId) throws MalformedURLException {
-        return new UrlResource("file:" + userId +"\\"+ filename);
-    }*/
+        return new UrlResource("file:" +fileDir+ userId +"\\"+ filename);
+    }
 
     private String rnd(String originalName, byte[] fileData, String path) throws Exception {
         UUID uuid = UUID.randomUUID();

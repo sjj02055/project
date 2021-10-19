@@ -16,33 +16,17 @@
       padding-bottom: 40px;
     }
 
-    .user-profile, .user-feed {
-      border: 1px solid #262626;
+    .img-profile {
+      width: 200px;
+      height: 200px;
+      border: 1px solid #fafafa;
+      border-radius: 100%;
+      display: block;
+      margin: 0 auto;
     }
 
-    .user-img-profile, .user-info {
-      border: 1px solid #262626;
-      height: 375px;
-    }
-
-    .user-img-profile {
-      display: inline-block;
-      width: 310px;
-      margin-right: 34px;
-    }
-
-    .user-info {
-      display: inline-block;
-      width: 614px;
-      top: 94px;
-    }
-
-    .user-profile {
-      height: 375px;
-    }
-
-    .user-feed {
-      height: 300px;
+    .pic {
+      border-radius: 100%;
     }
 
   </style>
@@ -51,7 +35,7 @@
   <div class="nav-container">
     <div class="nav-1">
       <img class="logo_instagram_txt" src="" alt="">
-      <a th:href="@{/}">petmily</a>
+      <a th:href="@{/petmily/home}">petmily</a>
     </div>
     <input id="searchInput" type="search" class="input-search" placeholder="검색">
     <div class="nav-2">
@@ -61,10 +45,23 @@
   </div>
 </nav>
 <main>
-
-  <div>
-    <div class="user-img-profile"></div>
-    <div class="user-info"></div>
+  <div class="info">
+    <div class="user-img-profile">
+      <div class="img">
+        <div class="title_image">
+          <div th:if="${loginMember.profile_photo == null}">
+            <img class="img-profile pic" th:src="@{/images/noimage.png}" >
+          </div>
+          <div th:unless="${loginMember.profile_photo == null}">
+            <img class="img-profile pic" th:src="@{/images/profile/{photo}(photo=${loginMember.getProfile_photo})}">
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="user-info">
+      <a th:href="@{/petmily/profile/${p.member.id}}">
+        <a class="userID point-span" th:href="@{/petmily/profile}" th:text="|${member.nickname}|">사용자아이디</a>
+    </div>
   </div>
   <div class="user-feed"></div>
 </main>

@@ -4,19 +4,20 @@
     <div th:replace="fragments/header ::header"></div>
     <meta charset="UTF-8">
     <title>Title</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/upload.css}"/>
 </head>
 <body>
 <div class="contents">
     <!-- 2장이상의 사진을 저장하려면 enctype="multipart/form-data" 필수  -->
     <form action="/petmily/upload" method="post" enctype="multipart/form-data" autocomplete="off" th:object="${post}">
         <input type="hidden" th:field="*{member.userId}" th:value="${loginMember.getUserId()}">
-        <div class="form-group">
-            <label for="gdsImg">파일 업로드 </label>
-            <input multiple="multiple" type="file" id="gdsImg" name="files" required />
+        <div class="form">
+            <label for="gdsImg" style="display: none;">파일 업로드 </label>
+            <input class="upload-file" multiple="multiple" type="file" id="gdsImg" name="files" required />
         </div>
         <div class="miribogi">
             <div class="select_img">
-                <img src=""> <!-- 이곳에 타이틀 사진이미지가 보인다 -->
+                <img class="title_img" src=""> <!-- 이곳에 타이틀 사진이미지가 보인다 -->
             </div>
             <script>
                 $("#gdsImg").change(
@@ -30,23 +31,25 @@
                         }
                     });
             </script>
-            <button type="button" class="btn cancel_btn">접기</button>
+            <div class="btttn">
+                <button type="button" class="btn cancel_btn">접기</button>
+            </div>
             <script>
                 $(".cancel_btn").click(function() {
                     $(".miribogi").slideUp();
-                    $(".orderOpne_bnt").slideDown();
+                    $(".orderOpen_bnt").slideDown();
                 });
             </script>
         </div>
 
-        <div class="orderOpne">
-            <button type="button" class="btn orderOpne_bnt">
+        <div class="orderOpen">
+            <button type="button" class="btn orderOpen_bnt" style="display:none;">
                 <span style="margin: 4px;">업로드 메인 사진보기</span>
             </button>
             <script>
-                $(".orderOpne_bnt").click(function() {
+                $(".orderOpen_bnt").click(function() {
                     $(".miribogi").slideDown();
-                    $(".orderOpne_bnt").slideUp();
+                    $(".orderOpen_bnt").slideUp();
                 });
             </script>
         </div>
@@ -58,7 +61,9 @@
         <div class="form-group">
             <input type="text" class="form-control w200" th:field="*{location}" placeholder="위치 추가" />
         </div>
-        <button class="btn btn-primary">완료</button>
+        <div class="btttn">
+            <button class="btn btn-primary">완료</button>
+        </div>
     </form>
 </div>
 </body>

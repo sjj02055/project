@@ -6,6 +6,9 @@ import com.example.demo.service.MemberService;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -18,6 +21,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
 
 @Slf4j
 @Controller
@@ -26,6 +30,9 @@ import java.io.IOException;
 public class MemberController {
 
     private final MemberService memberService;
+
+    @Value("${file.dir}")
+    private String fileDir;
 
     @GetMapping("/create")
     public String createMember(Model model){
@@ -105,7 +112,7 @@ public class MemberController {
     @PostMapping("/update/profile_photo")
     public String insertPhoto(@RequestParam("filename") MultipartFile mFile, HttpServletRequest request) throws IOException{
 
-        String upload_path = "C:\\Users\\sjj02\\Desktop\\project\\project\\src\\main\\resources\\static\\images\\profile\\";
+        String upload_path = fileDir + "profile\\";
         HttpSession session = request.getSession(false);
         Member loginMember = (Member)session.getAttribute("loginMember");
 
@@ -125,7 +132,7 @@ public class MemberController {
         }
         session = request.getSession();
         session.setAttribute("loginMember",tempMember);
-        return "member/update/profile";
+        return "redirect::/";
     }
 
     @GetMapping("update/profile")
@@ -156,6 +163,12 @@ public class MemberController {
         session = request.getSession();
         session.setAttribute("loginMember",tempMember);
         return "petmily/profile";
+    }
+
+    @ResponseBody
+    @GetMapping("/images/profile/{filename}")
+    public Resource downloadImage(@PathVariable String filename) throws MalformedURLException {
+        return new UrlResource("file:" +fileDir+"profile\\"+filename);
     }
 
     @Data
