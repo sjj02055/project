@@ -35,7 +35,7 @@
   <div class="nav-container">
     <div class="nav-1">
       <img class="logo_instagram_txt" src="" alt="">
-      <a th:href="@{/petmily/home}">petmily</a>
+      <a th:href="@{/}">petmily</a>
     </div>
     <input id="searchInput" type="search" class="input-search" placeholder="검색">
     <div class="nav-2">
@@ -49,11 +49,11 @@
     <div class="user-img-profile">
       <div class="img">
         <div class="title_image">
-          <div th:if="${loginMember.profile_photo == null}">
+          <div th:if="${member.profile_photo == null}">
             <img class="img-profile pic" th:src="@{/images/noimage.png}" >
           </div>
-          <div th:unless="${loginMember.profile_photo == null}">
-            <img class="img-profile pic" th:src="@{/images/profile/{photo}(photo=${loginMember.getProfile_photo})}">
+          <div th:unless="${member.profile_photo == null}">
+            <img class="img-profile pic" th:src="@{/images/profile/{photo}(photo=${member.getProfile_photo})}">
           </div>
         </div>
       </div>

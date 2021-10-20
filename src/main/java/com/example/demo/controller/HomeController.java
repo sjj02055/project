@@ -51,14 +51,14 @@ public class HomeController {
         return "petmily/home";
     }
 
-    @GetMapping("/petmily/profile")
+    @GetMapping("/petmily/profile/{id}")
     public String profile(@SessionAttribute(name = "loginMember", required = false)
-    Member loginMember, Model model){
-
+    Member loginMember,@PathVariable Long id, Model model){
         if(loginMember == null){
             return "member/loginMember";
         }
-        model.addAttribute("member", loginMember);
+
+        model.addAttribute("member", memberService.find(id));
         return "/petmily/profile";
     }
 

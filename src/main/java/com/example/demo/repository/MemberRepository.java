@@ -48,4 +48,18 @@ public class MemberRepository {
                 .getResultList();
     }
 
+    //특정 단어가 포함된 ID 찾아오기
+    public List<Member> findByContainingUserId(String word){
+        return em.createQuery("select m from Member m where m.name LIKE CONCAT('%' , :word ,'%')", Member.class)
+                .setParameter("word",word)
+                .getResultList();
+    }
+
+    //특정 단어가 포함된 ID 갯수
+    public int countByContainingUserId(String word){
+        return em.createQuery("select m from Member m where m.name LIKE CONCAT('%' , :word ,'%')", Member.class)
+                .setParameter("word",word)
+                .getResultList()
+                .size();
+    }
 }

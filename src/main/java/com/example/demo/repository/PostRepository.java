@@ -20,8 +20,16 @@ public class PostRepository {
         em.persist(post);
     }
 
+    public void delete(Post post){
+        em.remove(post);
+    }
+
     public void piSave(Post_image pi){
         em.persist(pi);
+    }
+
+    public void pidelete(Post_image pi){
+        em.remove(pi);
     }
     public List<Post> findByUserIdOrderByIdDesc(long id){
         return em.createQuery("select p from Post p where p.member.id=:id ORDER BY p.id DESC " , Post.class)
@@ -31,6 +39,12 @@ public class PostRepository {
 
     public List<Post_image> findByPostId(){
         return em.createQuery("select p from Post_image p", Post_image.class)
+                .getResultList();
+    }
+
+    public List<Post_image> findByPostImage_postId(Long id){
+        return em.createQuery("select pi from Post_image pi WHERE pi.postId =: id", Post_image.class)
+                .setParameter("id", id)
                 .getResultList();
     }
 

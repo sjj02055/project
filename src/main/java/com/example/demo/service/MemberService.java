@@ -77,7 +77,13 @@ public class MemberService {
         findMember.setName(member.getName());
 
         memberRepository.save(findMember);
-
     }
 
+    public List<Member> findByContainingUserId(String word){
+        return memberRepository.findByContainingUserId(word);
+    }
+
+    public int countByContainingUserId(String word){
+        return memberRepository.countByContainingUserId(word);
+    }
 }

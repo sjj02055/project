@@ -30,6 +30,13 @@ public class PostService {
         return p.getId();
     }
 
+    /*@Transactional
+    public Long deletePost(Post p){
+        for(Post_image pi : postRepository.findByPostImage_postId(p.getId())){
+
+        }
+    }*/
+
     public List<Post> findByUserIdOrderByIdDesc(long id){
         return postRepository.findByUserIdOrderByIdDesc(id);
     }

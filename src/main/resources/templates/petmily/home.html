@@ -23,7 +23,7 @@
       <a th:href="@{petmily/upload}">
       <img src="" alt="업로드">
       </a>
-      <a th:href="@{petmily/profile}">
+      <a th:href="@{petmily/profile/{id}(id=${member.getId()})}">
       <img src="" alt="프로필">
       </a>
     </div>
@@ -91,13 +91,13 @@
       <a th:href="@{/petmily/profile}">
       <img class="pic" th:src="@{/images/profile/{photo}(photo=${member.getProfile_photo})}" alt="">
       </a>
-      <form th:action="@{/member/logout}" method="post">
-        <button type="submit" th:onclick="|location.href='@{member/login}'|">로그아웃</button>
-      </form>
       <div>
         <a class="userID point-span" th:href="@{/petmily/profile}" th:text="|${member.nickname}|">사용자아이디</a>
         <span class="sub-span" th:text="|${member.name}|">이름</span>
       </div>
+      <form th:action="@{/member/logout}" method="post">
+        <button type="submit" th:onclick="|location.href='@{member/login}'|">로그아웃</button>
+      </form>
     </div>
     <!-- recommendation section -->
     <div class="section-recommend">

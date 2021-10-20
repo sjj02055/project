@@ -132,7 +132,7 @@ public class MemberController {
         }
         session = request.getSession();
         session.setAttribute("loginMember",tempMember);
-        return "redirect::/";
+        return "redirect:/";
     }
 
     @GetMapping("update/profile")

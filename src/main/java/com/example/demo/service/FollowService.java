@@ -19,7 +19,6 @@ public class FollowService {
     private FollowRepository followRepository;
     private MemberRepository memberRepository;
 
-
     @Transactional
     public void follow(Follow f){
         followRepository.save(f);
